@@ -20,6 +20,7 @@ public class TicketDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public int getNbTicket(String vehicleRegNumber) {
+        return 0;
     }
 
     public boolean saveTicket(Ticket ticket){
