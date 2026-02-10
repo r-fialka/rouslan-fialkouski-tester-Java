@@ -30,7 +30,7 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try{
 <span class="fc" id="L32">            ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();</span>
-<span class="pc bpc" id="L33" title="2 of 4 branches missed.">            if(parkingSpot !=null &amp;&amp; parkingSpot.getId() &gt; 0){</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">            if(parkingSpot !=null &amp;&amp; parkingSpot.getId() &gt; 0){</span>
 <span class="fc" id="L34">                String vehicleRegNumber = getVehichleRegNumber();</span>
 <span class="fc" id="L35">                int nbTickets = ticketDAO.getNbTicket(vehicleRegNumber);</span>
 
@@ -112,7 +112,7 @@ public class ParkingService {
 <span class="fc" id="L112">            ticket.setOutTime(outTime);</span>
 
             // New code: checking if the user is a repeat visitor
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            boolean discount = ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) &gt; 0;</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">            boolean discount = ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) &gt; 0;</span>
 
             // Apply the rate calculation taking into account the discount
 <span class="fc" id="L118">            fareCalculatorService.calculateFare(ticket, discount);</span>

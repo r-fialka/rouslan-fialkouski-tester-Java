@@ -18,16 +18,16 @@ public class ParkingSpot {
     }
 
     public void setId(int number) {
-<span class="nc" id="L21">        this.number = number;</span>
-<span class="nc" id="L22">    }</span>
+<span class="fc" id="L21">        this.number = number;</span>
+<span class="fc" id="L22">    }</span>
 
     public ParkingType getParkingType() {
 <span class="fc" id="L25">        return parkingType;</span>
     }
 
     public void setParkingType(ParkingType parkingType) {
-<span class="nc" id="L29">        this.parkingType = parkingType;</span>
-<span class="nc" id="L30">    }</span>
+<span class="fc" id="L29">        this.parkingType = parkingType;</span>
+<span class="fc" id="L30">    }</span>
 
     public boolean isAvailable() {
 <span class="fc" id="L33">        return isAvailable;</span>
@@ -39,15 +39,15 @@ public class ParkingSpot {
 
     @Override
     public boolean equals(Object o) {
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (this == o) return true;</span>
-<span class="nc bnc" id="L43" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
-<span class="nc" id="L44">        ParkingSpot that = (ParkingSpot) o;</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        return number == that.number;</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L43" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L44">        ParkingSpot that = (ParkingSpot) o;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        return number == that.number;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L50">        return number;</span>
+<span class="fc" id="L50">        return number;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
