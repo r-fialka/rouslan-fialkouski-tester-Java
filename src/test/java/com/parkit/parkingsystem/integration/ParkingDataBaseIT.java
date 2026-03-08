@@ -153,7 +153,7 @@ class ParkingDataBaseIT {
 
             Date oneHourAgo = new Date(System.currentTimeMillis() - 60 * 60 * 1000);
 
-            // FIRST PARKING
+            // First parking
             parkingService.processIncomingVehicle();
             dataBasePrepareService.updateInTimeForVehicle("ABCDEF", oneHourAgo);
             parkingService.processExitingVehicle();
@@ -161,7 +161,7 @@ class ParkingDataBaseIT {
             Ticket firstTicket = ticketDAO.getTicket("ABCDEF");
             double firstPrice = firstTicket.getPrice();
 
-            // SECOND PARKING
+            // Second parking
             parkingService.processIncomingVehicle();
             dataBasePrepareService.updateInTimeForVehicle("ABCDEF", oneHourAgo);
 

@@ -19,9 +19,7 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    /**
-     * Count number of tickets for a vehicle
-     */
+    // Count number of tickets for a vehicle
     public int getNbTicket(String vehicleRegNumber) {
 
         int nbTicket = 0;
@@ -60,9 +58,7 @@ public class TicketDAO {
         return nbTicket;
     }
 
-    /**
-     * Save new ticket
-     */
+    // Save new ticket
     public boolean saveTicket(Ticket ticket) {
 
         Connection con = null;
@@ -101,9 +97,7 @@ public class TicketDAO {
         }
     }
 
-    /**
-     * Get ticket for vehicle
-     */
+    // Get ticket for vehicle
     public Ticket getTicket(String vehicleRegNumber) {
 
         Connection con = null;
@@ -154,9 +148,7 @@ public class TicketDAO {
         return ticket;
     }
 
-    /**
-     * Update ticket price and exit time
-     */
+    // Update ticket price and exit time
     public boolean updateTicket(Ticket ticket) {
 
         Connection con = null;

@@ -40,7 +40,7 @@ public class ParkingService {
 
             String vehicleRegNumber = getVehichleRegNumber();
 
-            // Проверяем, есть ли у пользователя предыдущие визиты
+            // Check if the user has previous visits
             int nbTickets = ticketDAO.getNbTicket(vehicleRegNumber);
             boolean isRecurringUser = nbTickets > 0;
 
@@ -48,11 +48,11 @@ public class ParkingService {
                 System.out.println("Great to see you again! As a regular user of our parking facility, you will receive a 5% discount.");
             }
 
-            // Обновляем статус парковочного места
+            // Updating parking space status
             parkingSpot.setAvailable(false);
             parkingSpotDAO.updateParking(parkingSpot);
 
-            // Создаем новый билет
+            // Create a new ticket
             Date inTime = new Date();
 
             Ticket ticket = new Ticket();
@@ -62,7 +62,7 @@ public class ParkingService {
             ticket.setInTime(inTime);
             ticket.setOutTime(null);
 
-            // Устанавливаем флаг recurring
+            // Set the recurring flag
             ticket.setRecurring(isRecurringUser);
 
             ticketDAO.saveTicket(ticket);
@@ -132,12 +132,12 @@ public class ParkingService {
             Date outTime = new Date();
             ticket.setOutTime(outTime);
 
-            // Проверяем сколько раз пользователь парковался
+            // Check how many times the user has parked
             int nbTicket = ticketDAO.getNbTicket(vehicleRegNumber);
 
             boolean discount = nbTicket > 1;
 
-            // Рассчитываем стоимость
+            // Calculate the cost
             fareCalculatorService.calculateFare(ticket, discount);
 
             if (ticketDAO.updateTicket(ticket)) {

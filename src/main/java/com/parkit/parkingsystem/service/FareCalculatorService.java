@@ -11,7 +11,7 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is before in time");
         }
 
-        // Проверяем тип парковки
+        // Checking the parking type
         if (ticket.getParkingSpot().getParkingType() == null) {
             throw new IllegalArgumentException("Unknown Parking Type");
         }
