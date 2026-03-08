@@ -45,21 +45,31 @@ class TicketDAOTest {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
     }
 
-    /* =========================================================
-       getNbTicket
-       ========================================================= */
-
+    /**
+     * Verifies that getNbTicket returns 0 when no tickets
+     * exist for the specified vehicle registration number.
+     */
     @Test
-    void getNbTicket_shouldReturnZero() {
-        assertEquals(0, ticketDAO.getNbTicket("ABC123"));
+    void getNbTicket_shouldReturnZero_whenVehicleHasNoPreviousTickets() {
+
+        // Arrange
+        String vehicleRegNumber = "ABC123";
+
+        // Act
+        int result = ticketDAO.getNbTicket(vehicleRegNumber);
+
+        // Assert
+        assertEquals(0, result);
     }
 
-    /* =========================================================
-       saveTicket
-       ========================================================= */
 
+    /**
+     * Verifies that saveTicket returns true when the ticket
+     * is successfully inserted into the database.
+     */
     @Test
-    void saveTicket_shouldReturnTrue_whenInsertSucceeds() throws Exception {
+    void saveTicket_shouldReturnTrue_whenTicketIsSavedSuccessfully() throws Exception {
+
         // Arrange
         Ticket ticket = new Ticket();
         ticket.setId(1);
@@ -76,8 +86,13 @@ class TicketDAOTest {
         assertTrue(result);
     }
 
+    /**
+     * Verifies that saveTicket returns false when a database
+     * exception occurs during ticket insertion.
+     */
     @Test
-    void saveTicket_shouldReturnFalse_whenExceptionOccurs() throws Exception {
+    void saveTicket_shouldReturnFalse_whenDatabaseExceptionOccurs() throws Exception {
+
         // Arrange
         when(connection.prepareStatement(anyString()))
                 .thenThrow(new RuntimeException("DB error"));
@@ -91,12 +106,13 @@ class TicketDAOTest {
         assertFalse(result);
     }
 
-    /* =========================================================
-       getTicket
-       ========================================================= */
-
+    /**
+     * Verifies that getTicket returns a Ticket object when
+     * a matching ticket is found in the database.
+     */
     @Test
-    void getTicket_shouldReturnTicket_whenFound() throws Exception {
+    void getTicket_shouldReturnTicket_whenTicketExists() throws Exception {
+
         // Arrange
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true);
@@ -117,8 +133,13 @@ class TicketDAOTest {
         assertEquals(ParkingType.CAR, ticket.getParkingSpot().getParkingType());
     }
 
+    /**
+     * Verifies that getTicket returns null when no ticket
+     * is found for the provided vehicle registration number.
+     */
     @Test
-    void getTicket_shouldReturnNull_whenNoTicketFound() throws Exception {
+    void getTicket_shouldReturnNull_whenTicketDoesNotExist() throws Exception {
+
         // Arrange
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(false);
@@ -130,8 +151,12 @@ class TicketDAOTest {
         assertNull(ticket);
     }
 
+    /**
+     * Verifies that getTicket returns null when a database
+     * exception occurs during ticket retrieval.
+     */
     @Test
-    void getTicket_shouldReturnNull_whenExceptionOccurs() throws Exception {
+    void getTicket_shouldReturnNull_whenDatabaseExceptionOccurs() throws Exception {
         // Arrange
         when(connection.prepareStatement(anyString()))
                 .thenThrow(new RuntimeException("DB error"));
@@ -143,12 +168,13 @@ class TicketDAOTest {
         assertNull(ticket);
     }
 
-    /* =========================================================
-       updateTicket
-       ========================================================= */
-
+    /**
+     * Verifies that updateTicket returns true when the ticket
+     * is successfully updated in the database.
+     */
     @Test
-    void updateTicket_shouldReturnTrue_whenUpdateSucceeds() throws Exception {
+    void updateTicket_shouldReturnTrue_whenTicketIsUpdatedSuccessfully() throws Exception {
+
         // Arrange
         Ticket ticket = new Ticket();
         ticket.setId(1);
@@ -162,13 +188,73 @@ class TicketDAOTest {
         assertTrue(result);
     }
 
+    /**
+     * Verifies that updateTicket returns false when a database
+     * exception occurs during the update operation.
+     */
     @Test
-    void updateTicket_shouldReturnFalse_whenExceptionOccurs() throws Exception {
+    void updateTicket_shouldReturnFalse_whenDatabaseExceptionOccurs() throws Exception {
         // Arrange
         when(connection.prepareStatement(anyString()))
                 .thenThrow(new RuntimeException("DB error"));
 
         Ticket ticket = new Ticket();
+
+        // Act
+        boolean result = ticketDAO.updateTicket(ticket);
+
+        // Assert
+        assertFalse(result);
+    }
+
+    /**
+     * Verifies that saveTicket returns false when a database exception occurs.
+     */
+    @Test
+    void saveTicket_shouldReturnFalse_whenExceptionOccurs() throws Exception {
+
+        // Arrange
+        TicketDAO ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseConfig;
+
+        Ticket ticket = new Ticket();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("ABC123");
+        ticket.setPrice(0);
+        ticket.setInTime(new Date());
+        ticket.setOutTime(null);
+
+        when(dataBaseConfig.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString()))
+                .thenThrow(new RuntimeException("DB error"));
+
+        // Act
+        boolean result = ticketDAO.saveTicket(ticket);
+
+        // Assert
+        assertFalse(result);
+    }
+
+    /**
+     * Verifies that updateTicket returns false when a database exception occurs.
+     */
+    @Test
+    void updateTicket_shouldReturnFalse_whenExceptionOccurs() throws Exception {
+
+        // Arrange
+        TicketDAO ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseConfig;
+
+        Ticket ticket = new Ticket();
+        ticket.setId(1);
+        ticket.setPrice(5.0);
+        ticket.setOutTime(new Date());
+
+        when(dataBaseConfig.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString()))
+                .thenThrow(new RuntimeException("DB error"));
 
         // Act
         boolean result = ticketDAO.updateTicket(ticket);

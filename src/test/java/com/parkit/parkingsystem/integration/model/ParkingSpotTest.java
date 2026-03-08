@@ -8,8 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingSpotTest {
 
+    /**
+     * Verifies that the constructor correctly initializes
+     * the parking spot fields and that the getter methods
+     * return the expected values.
+     */
     @Test
-    void constructor_and_getters_shouldWorkCorrectly() {
+    void constructor_shouldInitializeFieldsCorrectly_whenParkingSpotIsCreated() {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
 
@@ -19,8 +25,13 @@ class ParkingSpotTest {
         assertTrue(spot.isAvailable());
     }
 
+    /**
+     * Verifies that the setter methods correctly update
+     * the parking spot properties.
+     */
     @Test
-    void setters_shouldUpdateValuesCorrectly() {
+    void setters_shouldUpdateParkingSpotFields_whenNewValuesAreProvided() {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
 
@@ -35,8 +46,13 @@ class ParkingSpotTest {
         assertFalse(spot.isAvailable());
     }
 
+    /**
+     * Verifies that equals returns true when comparing
+     * the same ParkingSpot object instance.
+     */
     @Test
-    void equals_shouldReturnTrue_forSameObject() {
+    void equals_shouldReturnTrue_whenComparingSameObjectInstance() {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
 
@@ -44,8 +60,13 @@ class ParkingSpotTest {
         assertEquals(spot, spot);
     }
 
+    /**
+     * Verifies that two ParkingSpot objects are considered equal
+     * when they have the same parking spot ID.
+     */
     @Test
-    void equals_shouldReturnTrue_forSameId() {
+    void equals_shouldReturnTrue_whenParkingSpotIdsAreEqual() {
+
         // Arrange
         ParkingSpot spot1 = new ParkingSpot(1, ParkingType.CAR, true);
         ParkingSpot spot2 = new ParkingSpot(1, ParkingType.BIKE, false);
@@ -54,8 +75,13 @@ class ParkingSpotTest {
         assertEquals(spot1, spot2);
     }
 
+    /**
+     * Verifies that two ParkingSpot objects are not equal
+     * when their parking spot IDs are different.
+     */
     @Test
-    void equals_shouldReturnFalse_forDifferentId() {
+    void equals_shouldReturnFalse_whenParkingSpotIdsAreDifferent() {
+
         // Arrange
         ParkingSpot spot1 = new ParkingSpot(1, ParkingType.CAR, true);
         ParkingSpot spot2 = new ParkingSpot(2, ParkingType.CAR, true);
@@ -64,8 +90,13 @@ class ParkingSpotTest {
         assertNotEquals(spot1, spot2);
     }
 
+    /**
+     * Verifies that equals returns false when comparing
+     * a ParkingSpot with null or an object of another type.
+     */
     @Test
-    void equals_shouldReturnFalse_forNullAndDifferentClass() {
+    void equals_shouldReturnFalse_whenComparingWithNullOrDifferentClass() {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
 
@@ -74,8 +105,13 @@ class ParkingSpotTest {
         assertNotEquals(spot, "not a parking spot");
     }
 
+    /**
+     * Verifies that the hashCode implementation
+     * is based on the parking spot ID.
+     */
     @Test
-    void hashCode_shouldBeBasedOnId() {
+    void hashCode_shouldReturnParkingSpotId_whenHashCodeIsCalculated() {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(10, ParkingType.CAR, true);
 

@@ -46,8 +46,13 @@ class ParkingDataBaseIT {
         dataBasePrepareService.clearDataBaseEntries();
     }
 
+    /**
+     * Verifies that when a car enters the parking lot,
+     * a new ticket is created and the parking spot becomes unavailable.
+     */
     @Test
-    void testParkingACar() {
+    void processIncomingVehicle_shouldCreateTicketAndOccupyParkingSpot_whenCarEntersParking() {
+
         // Arrange
         ParkingService parkingService =
                 new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -62,8 +67,14 @@ class ParkingDataBaseIT {
                 "Parking spot should be unavailable");
     }
 
+    /**
+     * Verifies that when a vehicle exits the parking lot,
+     * the system calculates the parking price, records the exit time,
+     * and marks the parking spot as available again.
+     */
     @Test
-    void testParkingLotExit() {
+    void processExitingVehicle_shouldCalculateFareAndFreeParkingSpot_whenVehicleLeavesParking() {
+
         // Arrange
         ParkingService parkingService =
                 new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -74,8 +85,10 @@ class ParkingDataBaseIT {
                 "ABCDEF",
                 new Date(System.currentTimeMillis() - 60 * 60 * 1000)
         );
+
         // Act
         parkingService.processExitingVehicle();
+
         // Assert
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
@@ -92,44 +105,77 @@ class ParkingDataBaseIT {
         );
     }
 
+    /**
+     * Verifies that a recurring user receives a discount
+     * when exiting the parking lot for the second time.
+     */
+    @Nested
+    @Tag("ExitingVehicleTest")
+    @DisplayName("Tests pour la sortie du véhicule")
+    class ExitingVehicleTest {
 
-    @Test
-    void testParkingLotExitRecurringUser() {
-        // Arrange
-        ParkingService parkingService =
-                new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        /**
+         * Verifies that the first parking visit does not apply any discount.
+         */
+        @Test
+        void processExitingVehicle_shouldCalculateNormalPrice_whenFirstParking() {
 
-        // Act - FIRST PARKING
-        parkingService.processIncomingVehicle();
+            // Arrange
+            ParkingService parkingService =
+                    new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        dataBasePrepareService.updateInTimeForVehicle(
-                "ABCDEF",
-                new Date(System.currentTimeMillis() - 60 * 60 * 1000)
-        );
+            Date oneHourAgo = new Date(System.currentTimeMillis() - 60 * 60 * 1000);
 
-        parkingService.processExitingVehicle();
-        // Assert - FIRST PARKING
-        Ticket firstTicket = ticketDAO.getTicket("ABCDEF");
-        double firstPrice = firstTicket.getPrice();
+            parkingService.processIncomingVehicle();
 
-        assertTrue(firstPrice > 0, "First price should be greater than zero");
+            dataBasePrepareService.updateInTimeForVehicle("ABCDEF", oneHourAgo);
 
-        // Act - SECOND PARKING (RECURRING USER)
-        parkingService.processIncomingVehicle();
+            // Act
+            parkingService.processExitingVehicle();
 
-        dataBasePrepareService.updateInTimeForVehicle(
-                "ABCDEF",
-                new Date(System.currentTimeMillis() - 60 * 60 * 1000)
-        );
+            // Assert
+            Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
-        parkingService.processExitingVehicle();
-        // Assert - SECOND PARKING (DISCOUNT)
-        Ticket secondTicket = ticketDAO.getTicket("ABCDEF");
-        double secondPrice = secondTicket.getPrice();
+            assertNotNull(ticket.getOutTime(), "Out time should be recorded");
+            assertTrue(ticket.getPrice() > 0, "First parking should have a normal price");
+        }
 
-        assertTrue(
-                secondPrice < firstPrice,
-                "Recurring user should get 5% discount"
-        );
+        /**
+         * Verifies that the second parking visit applies a discount
+         * for recurring users.
+         */
+        @Test
+        void processExitingVehicle_shouldApplyDiscount_whenSecondParking() {
+
+            // Arrange
+            ParkingService parkingService =
+                    new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+            Date oneHourAgo = new Date(System.currentTimeMillis() - 60 * 60 * 1000);
+
+            // FIRST PARKING
+            parkingService.processIncomingVehicle();
+            dataBasePrepareService.updateInTimeForVehicle("ABCDEF", oneHourAgo);
+            parkingService.processExitingVehicle();
+
+            Ticket firstTicket = ticketDAO.getTicket("ABCDEF");
+            double firstPrice = firstTicket.getPrice();
+
+            // SECOND PARKING
+            parkingService.processIncomingVehicle();
+            dataBasePrepareService.updateInTimeForVehicle("ABCDEF", oneHourAgo);
+
+            // Act
+            parkingService.processExitingVehicle();
+
+            // Assert
+            Ticket secondTicket = ticketDAO.getTicket("ABCDEF");
+            double secondPrice = secondTicket.getPrice();
+
+            assertTrue(
+                    secondPrice < firstPrice,
+                    "Recurring user should receive a discount"
+            );
+        }
     }
 }

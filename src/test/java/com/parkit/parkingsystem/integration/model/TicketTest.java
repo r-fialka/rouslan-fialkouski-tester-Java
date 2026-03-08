@@ -11,8 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TicketTest {
 
+    /**
+     * Verifies that all Ticket getters and setters correctly
+     * store and return the expected values.
+     */
     @Test
-    void ticket_gettersAndSetters_workCorrectly() {
+    void gettersAndSetters_shouldStoreAndReturnCorrectValues_whenTicketPropertiesAreUpdated() {
+
         // Arrange
         Ticket ticket = new Ticket();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
@@ -31,7 +36,7 @@ class TicketTest {
         assertEquals(1, ticket.getId());
         assertEquals(parkingSpot, ticket.getParkingSpot());
         assertEquals("ABC123", ticket.getVehicleRegNumber());
-        assertEquals(10.0, ticket.getPrice());
+        assertEquals(10.0, ticket.getPrice(), 0.01);
         assertEquals(inTime, ticket.getInTime());
         assertEquals(outTime, ticket.getOutTime());
     }

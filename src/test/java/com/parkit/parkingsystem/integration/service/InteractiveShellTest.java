@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem.integration.service;
 
 import com.parkit.parkingsystem.service.InteractiveShell;
-import com.parkit.parkingsystem.service.ParkingService;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -12,11 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class InteractiveShellTest {
 
     /**
-     * Verifies that the menu can be displayed without throwing exceptions.
-     * This covers the loadMenu() method.
+     * Verifies that the menu can be displayed successfully
+     * without throwing any exceptions when the loadMenu method is executed.
      */
     @Test
-    void loadMenu_shouldPrintMenuWithoutException() throws Exception {
+    void loadMenu_shouldDisplayMenuWithoutThrowingException() throws Exception {
+
         // Arrange
         Method loadMenu = InteractiveShell.class
                 .getDeclaredMethod("loadMenu");
@@ -27,13 +27,13 @@ class InteractiveShellTest {
     }
 
     /**
-     * Verifies that the application can start and exit immediately
-     * when the shutdown option (3) is selected.
-     *
-     * This avoids infinite loops and database access.
+     * Verifies that the application exits immediately when the user selects
+     * the shutdown option (3) in the console menu.
+     * This test prevents the interactive loop from running indefinitely.
      */
     @Test
-    void loadInterface_shouldExitImmediately_whenOptionIsThree() {
+    void loadInterface_shouldExitApplication_whenShutdownOptionIsSelected() {
+
         // Arrange
         System.setIn(new ByteArrayInputStream("3\n".getBytes()));
 

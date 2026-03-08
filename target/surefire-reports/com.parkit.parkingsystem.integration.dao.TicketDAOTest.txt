@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.integration.dao.TicketDAOTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.475 s -- in com.parkit.parkingsystem.integration.dao.TicketDAOTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.309 s -- in com.parkit.parkingsystem.integration.dao.TicketDAOTest

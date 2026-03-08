@@ -14,7 +14,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-
         <log4j2.version>2.25.3</log4j2.version>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.11.0</mockito.version>
@@ -113,21 +112,17 @@
                 </executions>
             </plugin>
 
-            <!-- Surefire -->
+        </plugins>
+    </build>
+    <!-- Surefire-reports -->
+    <reporting>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.3</version>
-                <configuration>
-                    <useModulePath>false</useModulePath>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <argLine>
-                        ${argLine} -XX:+EnableDynamicAgentLoading
-                     </argLine>
-                 </configuration>
-             </plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.5.5</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
-         </plugins>
-     </build>
-
- </project>
+</project>

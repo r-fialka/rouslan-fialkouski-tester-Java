@@ -42,12 +42,13 @@ class ParkingSpotDAOTest {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
     }
 
-    /* =========================================================
-       getNextAvailableSlot
-       ========================================================= */
-
+    /**
+     * Verifies that the DAO returns the correct parking slot number
+     * when an available parking slot exists in the database.
+     */
     @Test
     void getNextAvailableSlot_shouldReturnSlotNumber_whenSlotExists() throws Exception {
+
         // Arrange
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true);
@@ -60,8 +61,13 @@ class ParkingSpotDAOTest {
         assertEquals(3, result);
     }
 
+    /**
+     * Verifies that the DAO returns the correct parking slot number
+     * when an available parking slot exists in the database.
+     */
     @Test
     void getNextAvailableSlot_shouldReturnMinusOne_whenNoSlotFound() throws Exception {
+
         // Arrange
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(false);
@@ -73,8 +79,13 @@ class ParkingSpotDAOTest {
         assertEquals(-1, result);
     }
 
+    /**
+     * Verifies that the DAO returns -1 when no available parking slot
+     * is found in the database.
+     */
     @Test
     void getNextAvailableSlot_shouldReturnMinusOne_whenExceptionOccurs() throws Exception {
+
         // Arrange
         when(connection.prepareStatement(anyString()))
                 .thenThrow(new RuntimeException("DB error"));
@@ -86,12 +97,13 @@ class ParkingSpotDAOTest {
         assertEquals(-1, result);
     }
 
-    /* =========================================================
-       updateParking
-       ========================================================= */
-
+    /**
+     * Verifies that the DAO safely returns -1 when a database exception occurs
+     * while searching for an available parking slot.
+     */
     @Test
     void updateParking_shouldReturnTrue_whenUpdateCountIsOne() throws Exception {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
         when(preparedStatement.executeUpdate()).thenReturn(1);
@@ -103,8 +115,13 @@ class ParkingSpotDAOTest {
         assertTrue(result);
     }
 
+    /**
+     * Verifies that the updateParking method returns true
+     * when the database successfully updates one parking spot.
+     */
     @Test
     void updateParking_shouldReturnFalse_whenUpdateCountIsZero() throws Exception {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, false);
         when(preparedStatement.executeUpdate()).thenReturn(0);
@@ -116,8 +133,13 @@ class ParkingSpotDAOTest {
         assertFalse(result);
     }
 
+    /**
+     * Verifies that the updateParking method returns false
+     * when no rows are updated in the database.
+     */
     @Test
     void updateParking_shouldReturnFalse_whenExceptionOccurs() throws Exception {
+
         // Arrange
         ParkingSpot spot = new ParkingSpot(1, ParkingType.CAR, true);
         when(connection.prepareStatement(anyString()))
